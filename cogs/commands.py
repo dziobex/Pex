@@ -22,11 +22,11 @@ class Commands(commands.Cog):
                                                    "`howgay [who?]`\n"
                                                    "`8ball [question]`")
         embed.add_field(name=":tools: Moderation", value="`giverole [member, role]`\n"
-                                                   "`removerole [member, role]]`\n"
+                                                   "`removerole [member, role]`\n"
                                                    "`kick [member, reason]`\n"
                                                    "`ban [member, reason]`\n"
                                                          "`unban [nickname#tag]`\n"
-                                                         "`clear [amount of messages to delete]]`\n"
+                                                         "`clear [amount of messages to delete]`\n"
                                                          "`newchannel [text channel? - yes or voice channel? - no, channel's name]`\n"
                                                          "`newcategory [category's name]\n`")
         embed.add_field(name=":pencil: Text", value="`reverse [text]`\n"
