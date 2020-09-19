@@ -1,44 +1,46 @@
-import discord
-import giphy_client
+import discord, giphy_client, praw, random
 from discord.ext import commands
 from discord.ext.commands import clean_content
-import praw
-import random
 
 class Fun(commands.Cog):
     def __init__(self, client):
         self.client = client
-        self.reddit = praw.Reddit(client_id='DdknSuiLYTCk6w',
-                             client_secret='_4UTRndvUA0N5nhPWlrPTdnpoms',
-                             user_agent='dziobax1')
-        self.giphy_token = "mdyWTPNKCtpdVZ75Q0C8Wnjpi0SX28LZ"
+        self.reddit = praw.Reddit(client_id='id',
+                             client_secret='secret',
+                             user_agent='user')
+        self.giphy_token = "token"
         self.api_instance = giphy_client.DefaultApi()
 
     @commands.command(name="meme")
-    async def meme(self, ctx):
-        memes = self.reddit.subreddit('ProgrammerHumor').top()
+    async def meme(self, ctx, programHum: bool = False):
+        if (programHum):
+            typeOfMeme = "ProgrammerHumor"
+        else:
+            typeOfMeme = random.choice(["memes", "dankmemes"])
+        memes = self.reddit.subreddit(typeOfMeme).hot(limit=20)
         post_to_picks = random.randint(0, 20)
+        submission = None
         for i in range(0, post_to_picks):
             submission = next(x for x in memes if not x.stickied)
-        embed = discord.Embed(title=submission.title, url=submission.url, color= discord.colour.Color.dark_grey())
+        embed = discord.Embed(title=submission.title, url=submission.url, color= discord.colour.Color.green())
         embed.set_image(url=submission.url)
         await ctx.send(embed=embed)
 
     @commands.command(name="howgay", aliases=["gay", "hgay"])
-    async def howgay(self, ctx):
+    async def howgay(self, ctx, user: discord.Member):
         num = random.randint(0, 100)
         state = emoji = ""
         if (num <= 33):
             state = f'{random.choice(["You are not gay", "No-homo", "**May** a little bit gay : )"])}'
-            emoji = f'{random.choice([":no_mouth:", ":black-heart:", ":smirk:"])}'
+            emoji = f'{random.choice([":no_mouth:", ":black_heart:", ":smirk:"])}'
         elif (num > 33 and num <= 66):
             state = f'{random.choice(["Wait. Are you gay?", "Half-homo", "Ho-ho, perhabs i smell gay ( ͡° ͜ʖ ͡°)", "My computer says you could be gay. Is he right, isn t he?"])}'
-            emoji = f'{random.choice([":wink:", ":yellow-heart:", ":smirk:"])}'
+            emoji = f'{random.choice([":wink:", ":yellow_heart:", ":smirk:"])}'
         else:
             state = f'{random.choice(["~100% gay!", "HoMo", "U r gay BRO", "GAY"])}'
             emoji = f'{random.choice([":people_holding_hands:", ":heart:", ":rainbow_flag:", ":smirk:"])}'
-        embed = discord.Embed(title=f'Gay-Machine', color=0xFFC0CB)
-        embed.add_field(name=f'{num}% gay {emoji}', value=state)
+        embed = discord.Embed(title=f':rainbow_flag: Gay-Machine', color=0xFFC0CB)
+        embed.add_field(name=f'Hey, **{user.name}**, u r {num}% gay {emoji}', value=state)
         await ctx.send(embed=embed)
 
     @commands.command(name='8ball', aliases=["ball", "8b"])
